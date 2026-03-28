@@ -1,21 +1,21 @@
 package com.authentication.connexion.controller.auth;
 
-import com.quizz.app.dto.auth.RefreshTokenApiResponse;
-import com.quizz.app.exception.RefreshTokenException;
-import com.quizz.app.repository.IUserRepository;
-import com.quizz.app.services.TokenService;
+import com.authentication.connexion.dto.auth.RefreshTokenApiResponse;
+import com.authentication.connexion.exception.RefreshTokenException;
+import com.authentication.connexion.repository.IUserRepository;
+import com.authentication.connexion.services.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.quizz.app.config.SuccessLoginHandler.REFRESH_TOKEN;
+import static com.authentication.connexion.config.SuccessLoginHandler.REFRESH_TOKEN;
 
 @RestController
 public class AuthController {
 
     @Autowired
-    private TokenService tokenService;
+    private AuthService tokenService;
 
     @Autowired
     private IUserRepository repository;

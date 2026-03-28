@@ -1,6 +1,6 @@
 package com.authentication.connexion.config;
 
-import com.quizz.app.services.TokenService;
+import com.authentication.connexion.services.auth.AuthService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +21,7 @@ import java.util.Optional;
 public class AuthFilterConfig extends OncePerRequestFilter {
 
     @Autowired
-    private TokenService tokenService;
+    private AuthService tokenService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

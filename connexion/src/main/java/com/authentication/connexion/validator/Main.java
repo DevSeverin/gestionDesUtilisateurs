@@ -1,7 +1,5 @@
 package com.authentication.connexion.validator;
 
-import com.authentication.connexion.model.Teste;
-
 public class Main {
 
     public static void main(String[] Args) {

@@ -16,10 +16,12 @@ public interface IUserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmailAndProvider(String email, String provider);
 
-    default User findByAccessToken(OAuth2AuthenticationToken token) throws UserNotFoundException {
+    default User findByAccessToken(OAuth2AuthenticationToken token) {
         var email = (String) token.getPrincipal().getAttribute(JWT_EMAIL_CLAIM_NAME);
         var provider = (String) token.getPrincipal().getAttribute(JWT_PROVIDER_CLAIM_NAME);
         return findByEmailAndProvider(email, provider).orElseThrow(() -> new UserNotFoundException(email, provider));
     }
+
+    Optional<User> findByRefreshToken(String refreshToken);
 
 }
