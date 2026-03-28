@@ -1,3 +1,35 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
 spring:
   application:
     name: connexion
+
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
+            redirectUri: ${BACKEND_BASE_URL}/login/oauth2/code/github
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            redirectUri: ${BACKEND_BASE_URL}/login/oauth2/code/google
+
+app:
+  jwt:
+    secret: ${JWT_SECRET} # Website used to generate JWT secret: https://jwtsecret.com/generate
+  oauth2:
+    redirectUri: ${FRONTEND_BASE_URL}/oauth2/redirect
+  admin:
+    email: ${ADMIN_EMAIL}
+
