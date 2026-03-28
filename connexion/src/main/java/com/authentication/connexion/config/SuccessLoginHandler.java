@@ -1,8 +1,8 @@
 package com.authentication.connexion.config;
 
-import com.quizz.app.model.User;
-import com.quizz.app.repository.IUserRepository;
-import com.quizz.app.services.TokenService;
+import com.authentication.connexion.model.User;
+import com.authentication.connexion.repository.IUserRepository;
+import com.authentication.connexion.services.auth.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Optional;
 
+@Component
 public class SuccessLoginHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     public static final String ACCESS_TOKEN = "access_token";
@@ -22,7 +24,7 @@ public class SuccessLoginHandler extends SimpleUrlAuthenticationSuccessHandler {
     public static final String GITHUB_PROVIDER = "github";
 
     @Autowired
-    private TokenService tokenService;
+    private AuthService authService;
 
     @Autowired
     private IUserRepository userRepository;
@@ -40,7 +42,7 @@ public class SuccessLoginHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private String getTargetUrl(User user) {
         return UriComponentsBuilder.fromUriString(redirectUri)
-                .queryParam(ACCESS_TOKEN, tokenService.createAccessToken(user))
+                .queryParam(ACCESS_TOKEN, authService.createAccessToken(user))
                 .queryParam(REFRESH_TOKEN, user.getRefreshToken())
                 .build().toString();
     }
@@ -52,7 +54,7 @@ public class SuccessLoginHandler extends SimpleUrlAuthenticationSuccessHandler {
         res.setEmail(email);
         res.setProvider(provider);
         res.setName((String) Optional.ofNullable(token.getPrincipal().getAttribute("name")).orElse("NON TROUVE"));
-        res.setRefreshToken(tokenService.createRefreshToken());
+        res.setRefreshToken(authService.createRefreshToken());
         return res;
     }
 

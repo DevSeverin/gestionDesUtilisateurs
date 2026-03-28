@@ -23,10 +23,6 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers(HttpMethod.GET, "/token/refresh", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users", "/quizzes/export").hasAnyAuthority(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.POST, "/quizzes").hasAnyAuthority(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.PUT, "/quizzes/*").hasAnyAuthority(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.DELETE, "/quizzes/*").hasAnyAuthority(ADMIN_ROLE)
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2Login -> oauth2Login.successHandler(successLoginHandler))
                 .addFilterBefore(authFilterConfig, BasicAuthenticationFilter.class)

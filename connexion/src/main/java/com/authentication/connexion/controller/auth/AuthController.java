@@ -5,6 +5,7 @@ import com.authentication.connexion.exception.RefreshTokenException;
 import com.authentication.connexion.repository.IUserRepository;
 import com.authentication.connexion.services.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,8 @@ public class AuthController {
 
     @Autowired
     private IUserRepository repository;
+
+//    public ResponseEntity<>
 
     @GetMapping("/token/refresh")
     public RefreshTokenApiResponse getRefreshToken(@RequestParam(REFRESH_TOKEN) String refreshToken) {
