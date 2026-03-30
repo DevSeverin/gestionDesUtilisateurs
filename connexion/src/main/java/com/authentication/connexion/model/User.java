@@ -2,14 +2,16 @@ package com.authentication.connexion.model;
 
 import com.authentication.connexion.dto.auth.AuthApiResponse;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
+@Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -25,6 +27,8 @@ public class User {
     private String provider;
 
     private String name;
+
+    private String password;
 
     @Column(name = "REFRESH_TOKEN")
     private String refreshToken;

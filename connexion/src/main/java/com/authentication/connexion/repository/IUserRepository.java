@@ -2,7 +2,6 @@ package com.authentication.connexion.repository;
 
 import com.authentication.connexion.exception.UserNotFoundException;
 import com.authentication.connexion.model.User;
-import com.authentication.connexion.services.auth.AuthService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
@@ -13,6 +12,8 @@ import static com.authentication.connexion.services.auth.AuthService.JWT_EMAIL_C
 import static com.authentication.connexion.services.auth.AuthService.JWT_PROVIDER_CLAIM_NAME;
 
 public interface IUserRepository extends JpaRepository<User, UUID> {
+
+    Optional<User> findByEmail(String email);
 
     Optional<User> findByEmailAndProvider(String email, String provider);
 

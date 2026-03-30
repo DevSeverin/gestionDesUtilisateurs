@@ -1,4 +1,3 @@
-import styles from './Login.module.css';
 import { Tooltip } from 'react-tooltip';
 import { FiLogIn } from "react-icons/fi";
 import { useNavigate } from "react-router-dom"
@@ -24,13 +23,13 @@ const Login = ({ style: type }: LoginProps) => {
                 data-tooltip-id="login" 
                 data-tooltip-content={LOGIN_MESSAGE}
                 data-tooltip-place="bottom"
-                className={styles.icon}>
+            >
             </FiLogIn>
         </div>
     );
 
     const button = () => (
-        <button onClick={handleClick} className={styles.button}>{LOGIN_MESSAGE}</button>
+        <button onClick={handleClick}>{LOGIN_MESSAGE}</button>
     );
 
     return type == "icon" ? icon() : button();

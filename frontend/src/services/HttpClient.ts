@@ -18,6 +18,10 @@ class HttpClient {
         return Axios.post<T>(url, data, this.getAuthorizationHeader());
     }
 
+    postPublic<T>(url: string, data: any) {
+        return Axios.post<T>(url, data); // pas de header Authorization
+    }
+
     put(url: string, data: any) {
         return Axios.put(url, data, this.getAuthorizationHeader());
     }

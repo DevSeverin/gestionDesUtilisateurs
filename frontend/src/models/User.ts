@@ -1,3 +1,5 @@
+// src/models/User.ts
+
 export class User {
     name = "";
     email = "";
