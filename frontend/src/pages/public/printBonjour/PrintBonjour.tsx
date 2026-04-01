@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 import { useUser } from "../../../context/UserContext";
-import { NOT_LOGGED_IN_USER } from "../../../models/User";
+import { NOT_LOGGED_IN_USER, User } from "../../../models/User";
 import UserService from "../../../services/UserService";
 import { useState } from "react";
 import ConfirmModal from "../../../components/ConfirmModal/ConfirmModal";
@@ -25,20 +25,22 @@ const PrintBonjour = () => {
             <h1>Bonjour</h1>
         </div>
         <div>
-            <Button>
-                Connecter
-            </Button>
-            <Button onClick={() => setOpenLogoutModal(true)}>
-                Deconnecter
-            </Button>
+            {User.isNotLoggedIn(user) ? 
+                <a href="/login">Se connecter</a>
+                :
+                <Button onClick={() => setOpenLogoutModal(true)}>
+                    Deconnecter
+                </Button>
+            }
+
              <ConfirmModal
-                header={LOGOUT_MODAL_HEADER}
-                message={LOGOUT_MODAL_MESSAGE}
-                isOpen={openLogoutModal}
-                setIsOpen={setOpenLogoutModal}
-                action={logout}
-                actionLabel={LOGOUT_MODAL_BUTTON_LABEL}
-            />
+                    header={LOGOUT_MODAL_HEADER}
+                    message={LOGOUT_MODAL_MESSAGE}
+                    isOpen={openLogoutModal}
+                    setIsOpen={setOpenLogoutModal}
+                    action={logout}
+                    actionLabel={LOGOUT_MODAL_BUTTON_LABEL}
+                />
         </div>
         </>
     )

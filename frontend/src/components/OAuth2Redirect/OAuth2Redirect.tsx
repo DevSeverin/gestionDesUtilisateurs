@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { URL_BEFORE_LOGIN } from "../../constants/Constants";
 import { User } from "../../models/User";
 import { useUser } from "../../context/UserContext";
 import UserService from "../../services/UserService";
