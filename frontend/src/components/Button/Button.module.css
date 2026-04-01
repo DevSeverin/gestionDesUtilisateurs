@@ -1,0 +1,36 @@
+.button {
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.6rem;
+    font-size: 1rem;
+    background-color: rgb(53, 53, 49);
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    min-width: 140px;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+.button:active {
+    transform: scale(0.98);
+}
+
+.delete {
+    font-size: 2rem;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    margin-right: 1rem;
+    border-radius: 0.4rem;
+    transition: all 0.2s ease-in;
+    color: var(--red-color);
+}
+
+.delete:hover {
+    background-color: #eee;
+}

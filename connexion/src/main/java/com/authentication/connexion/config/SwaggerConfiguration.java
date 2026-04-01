@@ -6,7 +6,9 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class SwaggerConfiguration {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -16,8 +18,8 @@ public class SwaggerConfiguration {
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Gestion de stock REST API")
-                        .description("Gestion de stock API documentation")
+                        .title("Gestion des utilisateurs REST API")
+                        .description("Gestion des utilisateurs API documentation")
                         .version("v1")
                 )
                 .addSecurityItem(new SecurityRequirement().addList(SECURITY_SCHEME_NAME))

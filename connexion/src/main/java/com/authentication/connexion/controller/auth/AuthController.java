@@ -6,18 +6,18 @@ import com.authentication.connexion.exception.RefreshTokenException;
 import com.authentication.connexion.repository.IUserRepository;
 import com.authentication.connexion.services.UserService;
 import com.authentication.connexion.services.auth.AuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import static com.authentication.connexion.config.SuccessLoginHandler.REFRESH_TOKEN;
 
 @RestController
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class AuthController {
     @PostMapping("auth/authenticate/local")
     public ResponseEntity<RefreshTokenApiResponse> authenticate(@RequestBody AuthApiRequest request) {
 
-        // 1. Vérification des credentials (Spring lance une exception si invalide)
+        log.info("=================== " + request.getEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -43,19 +43,15 @@ public class AuthController {
                 )
         );
 
-        // 2. Récupérer l'utilisateur depuis la BDD
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
 
-        // 3. Générer les tokens
         var accessToken = tokenService.createAccessToken(user);
         var refreshToken = tokenService.createRefreshToken();
 
-        // 4. Sauvegarder le refresh token
         user.setRefreshToken(refreshToken);
         repository.save(user);
-
-        // 5. Retourner la réponse
+        log.info("------------------ Je suis appelle AuthController ----------------------");
         return ResponseEntity.ok(new RefreshTokenApiResponse(accessToken, refreshToken));
     }
 
@@ -69,6 +65,7 @@ public class AuthController {
         var newRefreshToken = tokenService.createRefreshToken();
         user.setRefreshToken(newRefreshToken);
         repository.save(user);
+        log.info("------------------ Je suis appelle AuthController token refresh ----------------------");
         return new RefreshTokenApiResponse(accessToken, newRefreshToken);
     }
 

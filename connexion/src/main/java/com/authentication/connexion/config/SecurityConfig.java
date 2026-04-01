@@ -14,6 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Component
 public class SecurityConfig {
@@ -27,15 +32,13 @@ public class SecurityConfig {
     private AuthFilterConfig authFilterConfig;
 
     @Autowired
-    private UserDetailsService userDetailsService;  // ✅ Ajouté
+    private UserDetailsService userDetailsService;
 
-    // ✅ Ajouté — expose AuthenticationManager comme bean
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // ✅ Ajouté — lie UserDetailsService + PasswordEncoder ensemble
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -44,23 +47,41 @@ public class SecurityConfig {
         return provider;
     }
 
-    // ✅ Ajouté — encodeur de mot de passe
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ Inchangé — ta chaîne de filtres originale + route login local ouverte
+    /**
+     * modifie url front end
+     * @return
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config); // ✅ Appliqué sur toutes les routes
+        return source;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS activé
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/auth/authenticate/local").permitAll()
                         .requestMatchers(HttpMethod.GET, "/token/refresh", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/authenticate/local").permitAll() // ✅ Ajouté
                         .anyRequest().authenticated())
-                .oauth2Login(oauth2Login -> oauth2Login.successHandler(successLoginHandler))
+                .oauth2Login(oauth2 -> oauth2.successHandler(successLoginHandler))
                 .addFilterBefore(authFilterConfig, BasicAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .build();
     }
 }

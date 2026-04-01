@@ -27,9 +27,9 @@ spring:
 
 app:
   jwt:
-    secret: ${JWT_SECRET} # Website used to generate JWT secret: https://jwtsecret.com/generate
+    secret: ${JWT_SECRET} 
   oauth2:
     redirectUri: ${FRONTEND_BASE_URL}/oauth2/redirect
   admin:
-    email: ${ADMIN_EMAIL}
+    email: randrianavonyw@gmail.com
 

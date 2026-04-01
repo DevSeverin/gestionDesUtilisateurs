@@ -7,7 +7,7 @@ class UserService {
     static INSTANCE = new UserService();
 
     saveUser(user: User) {
-        localStorage.setItem(USER, JSON.stringify(user))
+        localStorage.setItem(USER, JSON.stringify(user));
     }
 
     getUser() {
@@ -18,21 +18,29 @@ class UserService {
 
     refreshUser(setUser: (user: User) => void) {
         const user = this.getUser();
-        if (User.isNotLoggedIn(user)) {
-        return;
-        }
-        return HttpClient.get<Tokens>(`/token/refresh?refresh_token=${user.refreshToken}`).then(res => {
-        const newUser = User.parse(res.data.accessToken, res.data.refreshToken)
-        setUser(newUser);
-        this.saveUser(newUser);
-        });
+
+        // ✅ Ne pas appeler le backend si l'utilisateur n'est pas connecté
+        if (User.isNotLoggedIn(user)) return;
+
+        // ✅ Ne pas appeler si pas de refresh token
+        if (!user.refreshToken) return;
+
+        return HttpClient.get<Tokens>(`/token/refresh?refresh_token=${user.refreshToken}`)
+            .then(res => {
+                const newUser = User.parse(res.data.accessToken, res.data.refreshToken);
+                setUser(newUser);
+                this.saveUser(newUser);
+            })
+            .catch(() => {
+                // ✅ Silencieux — ne pas crasher si le refresh token est expiré
+                console.warn("Refresh token expiré, session terminée.");
+            });
     }
 
     getAccessToken() {
         const user = this.getUser();
         return User.isLoggedIn(user) && user.accessToken ? `Bearer ${user.accessToken}` : null;
     }
-
 }
 
 export default UserService.INSTANCE;

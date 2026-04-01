@@ -1,5 +1,7 @@
 export const USER = 'user';
 
+export const CANCEL = 'Annuler';
+
 export const LOGIN_MESSAGE = 'Connectez-vous';
 export const LOGOUT_MODAL_HEADER = 'Déconnexion';
 export const LOGOUT_MODAL_MESSAGE = 'Êtes-vous sûr de vouloir vous déconnecter ?';

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { useEffect, useState } from 'react';
+import "react-responsive-modal/styles.css";
+import './App.css';
 import UserService from './services/UserService'
 import { UserContext } from './context/UserContext';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -13,7 +14,8 @@ function App() {
   const [user, setUser] = useState(UserService.getUser());
 
   useEffect(() => {
-    setInterval(() => UserService.refreshUser(setUser), 60000)
+    const interval = setInterval(() => UserService.refreshUser(setUser), 60000);
+    return () => clearInterval(interval); 
   }, []);
 
   return (
@@ -22,7 +24,7 @@ function App() {
         <Routes>
           <Route path="/">
             <Route element={<LoggedInPage />}>
-                <Route path="/print-bonjour" element={<PrintBonjourUser />} />
+                <Route path="/print-bonjour-user" element={<PrintBonjourUser />} />
             </Route>
             <Route path='/login' element={<Login />} />
             <Route index element={<PrintBonjour />} />

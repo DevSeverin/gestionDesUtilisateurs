@@ -7,8 +7,8 @@ import UserService from "../../services/UserService";
 
 const OAuth2Redirect = () => {
     const location = useLocation();
-    const { user, setUser } = useUser();
-    const redirectUrl = localStorage.getItem(URL_BEFORE_LOGIN) || '/';
+    const { setUser } = useUser(); 
+    const redirectUrl = '/print-bonjour-user';
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
@@ -18,11 +18,9 @@ const OAuth2Redirect = () => {
         const loggedInUser = User.parse(accessToken, refresh_token);
         setUser(loggedInUser);
         UserService.saveUser(loggedInUser);
-    }, [location, user, setUser]);
-    
-    return (
-        <Navigate to={redirectUrl} />
-    )
+    }, [location]);
+
+    return <Navigate to={redirectUrl} />;
 }
 
 export default OAuth2Redirect;
